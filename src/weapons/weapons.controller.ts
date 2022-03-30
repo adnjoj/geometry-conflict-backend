@@ -30,7 +30,6 @@ const fileFieldsInterceptor = FileFieldsInterceptor([
   { name: 'shotSound', maxCount: 1 },
 ]);
 
-@UseGuards(JwtAuthGuard)
 @Controller('weapons')
 export class WeaponsController {
   constructor(
@@ -48,6 +47,7 @@ export class WeaponsController {
     return this.weaponsService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(fileFieldsInterceptor)
   create(
@@ -57,6 +57,7 @@ export class WeaponsController {
     return this.weaponsService.create(data);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   @UseInterceptors(fileFieldsInterceptor)
   update(
