@@ -10,7 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+const class_transformer_1 = require("class-transformer");
 const typeorm_1 = require("typeorm");
+const permission_entity_1 = require("../../permissions/entities/permission.entity");
 let User = class User {
 };
 __decorate([
@@ -18,17 +20,20 @@ __decorate([
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ unique: true, nullable: false }),
-    __metadata("design:type", String)
-], User.prototype, "email", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: false, length: 50 }),
+    (0, typeorm_1.Column)({ length: 50, unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: false, length: 50 }),
+    (0, class_transformer_1.Exclude)(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    (0, class_transformer_1.Exclude)(),
+    (0, typeorm_1.ManyToMany)(() => permission_entity_1.Permission),
+    (0, typeorm_1.JoinTable)(),
+    __metadata("design:type", Array)
+], User.prototype, "permissions", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)('users')
 ], User);

@@ -1,5 +1,3 @@
-import { User } from '../../users/entities/user.entity';
-export interface LoginResponseDto {
+export declare class LoginResponseDto {
     token: string;
-    user: Omit<User, 'password'>;
 }

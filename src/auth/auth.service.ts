@@ -1,4 +1,5 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { hash, compare } from 'bcrypt';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
@@ -13,39 +14,38 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async checkCredentials(email: string, password: string): Promise<User> {
-    const user = await this.usersService.findOneByEmail(email);
+  async checkCredentials(username: string, password: string): Promise<User> {
+    const user = await this.usersService.findOneByUsername(username);
 
-    if (user && user.password === password) {
-      return user;
-    }
+    if (!user) return null;
 
-    return null;
+    const passwordIsCorrect = await compare(password, user.password);
+
+    if (!passwordIsCorrect) return null;
+    return user;
   }
 
   async login(user: User): Promise<LoginResponseDto> {
     return {
-      user,
       token: this.jwtService.sign({
-        email: user.email,
+        username: user.username,
         sub: user.id,
       }),
     };
   }
 
   async register(data: RegistrationDto): Promise<RegistrationResponseDto> {
-    if (data.username.length > 50) {
-      throw new UnprocessableEntityException({
-        message: 'Username max length is 50',
-      });
+    if ((await this.usersService.findOneByUsername(data.username)) != null) {
+      throw new BadRequestException('exceptions.UserExists#{}');
     }
 
-    const user = await this.usersService.create(data);
+    const hashedPassword = await hash(data.password, 10);
+    const newUserData = { ...data, password: hashedPassword };
+    const user = await this.usersService.create(newUserData);
 
     return {
-      user,
       token: this.jwtService.sign({
-        email: user.email,
+        username: user.username,
         sub: user.id,
       }),
     };

@@ -22,23 +22,25 @@ let UsersController = class UsersController {
     getAll() {
         return this.usersService.findAll();
     }
-    update(body) {
-        return this.usersService.update(body.id, body);
+    async getOne(id) {
+        return this.usersService.findOne(id);
     }
 };
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAll", null);
 __decorate([
-    (0, common_1.Patch)(),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Get)(':id'),
+    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], UsersController.prototype, "update", null);
+], UsersController.prototype, "getOne", null);
 UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __param(0, (0, common_1.Inject)(users_service_1.UsersService)),

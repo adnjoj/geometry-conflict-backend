@@ -5,17 +5,18 @@ import { UsersModule } from '../users/users.module';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
     JwtModule.register({
-      secret: '192849hf92ubf',
-      signOptions: { expiresIn: '60s' },
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '60d' },
     }),
   ],
-  providers: [AuthService, LocalStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
 })
 // @ts-ignore

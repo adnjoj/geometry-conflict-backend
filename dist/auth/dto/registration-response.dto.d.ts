@@ -1,2 +1,3 @@
 import { LoginResponseDto } from './login-response.dto';
-export declare type RegistrationResponseDto = LoginResponseDto;
+export declare class RegistrationResponseDto extends LoginResponseDto {
+}

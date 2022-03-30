@@ -1,3 +1,10 @@
-import { User } from '../../users/entities/user.entity';
+import { IsNotEmpty, MinLength } from 'class-validator';
 
-export type RegistrationDto = Pick<User, 'email' | 'username' | 'password'>;
+export class RegistrationDto {
+  @IsNotEmpty()
+  username: string;
+
+  @IsNotEmpty()
+  @MinLength(6)
+  password: string;
+}

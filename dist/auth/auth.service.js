@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
+const bcrypt_1 = require("bcrypt");
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
@@ -18,33 +19,33 @@ let AuthService = class AuthService {
         this.usersService = usersService;
         this.jwtService = jwtService;
     }
-    async checkCredentials(email, password) {
-        const user = await this.usersService.findOneByEmail(email);
-        if (user && user.password === password) {
-            return user;
-        }
-        return null;
+    async checkCredentials(username, password) {
+        const user = await this.usersService.findOneByUsername(username);
+        if (!user)
+            return null;
+        const passwordIsCorrect = await (0, bcrypt_1.compare)(password, user.password);
+        if (!passwordIsCorrect)
+            return null;
+        return user;
     }
     async login(user) {
         return {
-            user,
             token: this.jwtService.sign({
-                email: user.email,
+                username: user.username,
                 sub: user.id,
             }),
         };
     }
     async register(data) {
-        if (data.username.length > 50) {
-            throw new common_1.UnprocessableEntityException({
-                message: 'Username max length is 50',
-            });
+        if ((await this.usersService.findOneByUsername(data.username)) != null) {
+            throw new common_1.BadRequestException('exceptions.UserExists#{}');
         }
-        const user = await this.usersService.create(data);
+        const hashedPassword = await (0, bcrypt_1.hash)(data.password, 10);
+        const newUserData = Object.assign(Object.assign({}, data), { password: hashedPassword });
+        const user = await this.usersService.create(newUserData);
         return {
-            user,
             token: this.jwtService.sign({
-                email: user.email,
+                username: user.username,
                 sub: user.id,
             }),
         };

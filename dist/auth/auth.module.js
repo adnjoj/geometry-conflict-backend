@@ -14,6 +14,7 @@ const users_module_1 = require("../users/users.module");
 const auth_service_1 = require("./auth.service");
 const auth_controller_1 = require("./auth.controller");
 const local_strategy_1 = require("./strategies/local.strategy");
+const jwt_strategy_1 = require("./strategies/jwt.strategy");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
@@ -22,11 +23,11 @@ AuthModule = __decorate([
             users_module_1.UsersModule,
             passport_1.PassportModule,
             jwt_1.JwtModule.register({
-                secret: '192849hf92ubf',
-                signOptions: { expiresIn: '60s' },
+                secret: process.env.JWT_SECRET,
+                signOptions: { expiresIn: '60d' },
             }),
         ],
-        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy],
+        providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy],
         controllers: [auth_controller_1.AuthController],
     })
 ], AuthModule);

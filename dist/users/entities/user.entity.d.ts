@@ -1,6 +1,7 @@
+import { Permission } from '../../permissions/entities/permission.entity';
 export declare class User {
     id: number;
-    email: string;
     username: string;
     password: string;
+    permissions: Permission[];
 }

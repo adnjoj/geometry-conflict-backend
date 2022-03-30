@@ -1,8 +1,14 @@
-import { Controller, Inject, Body, Get, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Inject,
+  Param,
+  Get,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
+
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UpdateResult } from 'typeorm';
 
 @Controller('users')
 export class UsersController {
@@ -12,12 +18,14 @@ export class UsersController {
   ) {}
 
   @Get()
+  @UseInterceptors(ClassSerializerInterceptor)
   getAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
-  @Patch()
-  update(@Body() body: UpdateUserDto): Promise<UpdateResult> {
-    return this.usersService.update(body.id, body);
+  @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getOne(@Param('id') id: number): Promise<User> {
+    return this.usersService.findOne(id);
   }
 }
