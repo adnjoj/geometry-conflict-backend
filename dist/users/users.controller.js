@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
+const get_one_params_dto_1 = require("./dto/get-one-params.dto");
 const users_service_1 = require("./users.service");
 let UsersController = class UsersController {
     constructor(usersService) {
@@ -22,23 +23,21 @@ let UsersController = class UsersController {
     getAll() {
         return this.usersService.findAll();
     }
-    async getOne(id) {
-        return this.usersService.findOne(id);
+    async getOne(params) {
+        return this.usersService.findOne(params.id);
     }
 };
 __decorate([
     (0, common_1.Get)(),
-    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [get_one_params_dto_1.GetOneParamsDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getOne", null);
 UsersController = __decorate([

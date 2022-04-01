@@ -7,7 +7,7 @@ import {
   stringValidationOptions,
 } from 'src/i18n/validation-options/exceptions.validation-options';
 
-import { Clip } from 'src/clips/entities/clip.entity';
+// import { Clip } from 'src/clips/entities/clip.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { WeaponType } from './weapon-type.entity';
@@ -62,6 +62,6 @@ export class Weapon {
   @Min(0, minValidationOptions)
   weight: number;
 
-  @ManyToOne(() => Clip)
-  clip: Clip;
+  // @ManyToOne(() => Clip)
+  // clip: Clip;
 }

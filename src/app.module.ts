@@ -1,25 +1,22 @@
 import { join } from 'path';
-import { Module } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-import { AllExceptionsFilter } from './all-exceptions.filter';
-
-import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { WeaponsModule } from './weapons/weapons.module';
-import { EquipmentModule } from './equipment/equipment.module';
-import { ClipsModule } from './clips/clips.module';
-import { MapsModule } from './maps/maps.module';
-import { PermissionsModule } from './permissions/permissions.module';
+import { CaslModule } from './casl/casl.module';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
+import { AllExceptionsFilter } from './filters/all-exceptions.filter';
 
 @Module({
   imports: [
@@ -33,12 +30,9 @@ import { AppService } from './app.service';
       },
     }),
     UsersModule,
+    CaslModule,
     AuthModule,
     WeaponsModule,
-    EquipmentModule,
-    ClipsModule,
-    MapsModule,
-    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -46,6 +40,10 @@ import { AppService } from './app.service';
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
   ],
 })

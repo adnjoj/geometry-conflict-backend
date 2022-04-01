@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const class_transformer_1 = require("class-transformer");
 const typeorm_1 = require("typeorm");
-const permission_entity_1 = require("../../permissions/entities/permission.entity");
+const role_entity_1 = require("../../roles/entities/role.entity");
 let User = class User {
 };
 __decorate([
@@ -30,10 +30,10 @@ __decorate([
 ], User.prototype, "password", void 0);
 __decorate([
     (0, class_transformer_1.Exclude)(),
-    (0, typeorm_1.ManyToMany)(() => permission_entity_1.Permission),
+    (0, typeorm_1.ManyToMany)(() => role_entity_1.Role, { eager: true }),
     (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
-], User.prototype, "permissions", void 0);
+], User.prototype, "roles", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)('users')
 ], User);

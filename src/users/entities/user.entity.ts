@@ -7,7 +7,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 
-import { Permission } from '../../permissions/entities/permission.entity';
+import { Role } from '../../roles/entities/role.entity';
 
 @Entity('users')
 export class User {
@@ -22,7 +22,7 @@ export class User {
   password: string;
 
   @Exclude()
-  @ManyToMany(() => Permission)
+  @ManyToMany(() => Role, { eager: true })
   @JoinTable()
-  permissions: Permission[];
+  roles: Role[];
 }

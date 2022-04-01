@@ -1,4 +1,6 @@
 import { Repository, DeleteResult, UpdateResult } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { PermissionsService } from '../permissions/permissions.service';
 import { User } from './entities/user.entity';
 export declare class UsersService {
@@ -8,8 +10,8 @@ export declare class UsersService {
     findAll(): Promise<User[]>;
     findOne(id: number): Promise<User>;
     findOneByUsername(username: string): Promise<User>;
-    create(user: Omit<User, 'id' | 'permissions'>): Promise<User>;
-    update(id: number, user: Partial<User>): Promise<UpdateResult>;
+    create(user: CreateUserDto): Promise<User>;
+    update(id: number, user: UpdateUserDto): Promise<UpdateResult>;
     delete(id: number): Promise<DeleteResult>;
     addPermission(user: User, permissionName: string): Promise<User>;
     removePermission(user: User, permissionName: string): Promise<User>;
