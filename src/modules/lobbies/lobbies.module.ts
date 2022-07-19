@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from '../auth/auth.module';
 import { GamesModule } from '../games/games.module';
 import { MapsModule } from '../maps/maps.module';
+import { SkinTypesModule } from '../skin-types/skin-types.module';
 
 import { LobbiesService } from './lobbies.service';
 
@@ -16,6 +17,7 @@ import { LobbiesGateway } from './lobbies.gateway';
     AuthModule,
     GamesModule,
     MapsModule,
+    SkinTypesModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: 60 },

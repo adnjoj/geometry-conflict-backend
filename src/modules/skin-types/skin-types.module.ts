@@ -11,5 +11,6 @@ import { SkinTypesController } from './skin-types.controller';
   imports: [TypeOrmModule.forFeature([SkinType])],
   controllers: [SkinTypesController],
   providers: [SkinTypesService, SkinTypeExistsRule],
+  exports: [SkinTypesService],
 })
 export class SkinTypesModule {}

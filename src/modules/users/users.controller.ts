@@ -56,7 +56,7 @@ export class UsersController {
 
   @Post('me/fraction')
   setFraction(@Req() { user }: Request, @Body() { fraction }: SetFractionDto) {
-    return this.usersService.setFraction((user as User).id, fraction);
+    return this.usersService.setFraction(user as User, fraction);
   }
 
   @Post('me/speciality')
@@ -64,27 +64,27 @@ export class UsersController {
     @Req() { user }: Request,
     @Body() { speciality }: SetSpecialityDto,
   ) {
-    return this.usersService.setSpeciality((user as User).id, speciality);
+    return this.usersService.setSpeciality(user as User, speciality);
   }
 
   @Post('me/map')
   setMap(@Req() { user }: Request, @Body() { map }: SetMapDto) {
-    return this.usersService.setMap((user as User).id, map);
+    return this.usersService.setMap(user as User, map);
   }
 
   @Post('me/skins')
   setSkin(@Req() { user }: Request, @Body() { skin }: SetSkinDto) {
-    return this.usersService.setSkin((user as User).id, skin);
+    return this.usersService.setSkin(user as User, skin);
   }
 
   @Post('me/weapons')
   setWeapon(@Req() { user }: Request, @Body() { weapon, slot }: SetWeaponDto) {
-    return this.usersService.setWeapon((user as User).id, weapon, slot);
+    return this.usersService.setWeapon(user as User, weapon, slot);
   }
 
   @Delete('me/weapons')
   removeWeapon(@Req() { user }: Request, @Body() { slot }: RemoveWeaponDto) {
-    return this.usersService.removeWeapon((user as User).id, slot);
+    return this.usersService.removeWeapon(user as User, slot);
   }
 
   @Post('me/clips')

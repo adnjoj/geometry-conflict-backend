@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, Repository } from 'typeorm';
 
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -20,8 +20,10 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
     @InjectRepository(ClipToUser)
     private clipToUserRepository: Repository<ClipToUser>,
+
     @Inject(SkinsService)
     private skinsService: SkinsService,
   ) {}
@@ -46,94 +48,77 @@ export class UsersService {
     return this.userRepository.delete(id);
   }
 
-  async setFraction(userId: number, fraction: Fraction) {
-    const user = await this.userRepository.findOne(userId);
+  async setFraction(user: User, fraction: Fraction) {
     user.fraction = fraction;
     user.skins = [];
-    return this.userRepository.save(user);
+    await this.userRepository.save(user);
+
+    return { result: 'OK' };
   }
 
-  async setSpeciality(userId: number, speciality: Speciality) {
-    const user = await this.userRepository.findOne(userId);
+  async setSpeciality(user: User, speciality: Speciality) {
     user.speciality = speciality;
     user.weapons = [];
     user.clips = [];
-    return this.userRepository.save(user);
+    await this.userRepository.save(user);
+
+    return { result: 'OK' };
   }
 
-  async setSkin(userId: number, { id }: Skin) {
-    const user = await this.userRepository.findOne(userId);
+  async setSkin(user: User, { id }: Skin) {
     const skin = await this.skinsService.findOne({ id });
+    user.skins = user.skins.filter((s) => s.skin.type.id !== skin.type.id);
+    user.skins.push({ user, skin });
 
-    user.skins = user.skins.filter(
-      ({ skin: { type } }) => type.id !== skin.type.id,
-    );
+    await this.userRepository.save(user);
 
-    user.skins.push({ skin } as any);
-
-    return this.userRepository.save(user);
+    return { result: 'OK' };
   }
 
-  async setMap(userId: number, map: Map) {
-    const user = await this.userRepository.findOne(userId);
+  async setMap(user: User, map: Map) {
     user.map = map;
-    return this.userRepository.save(user);
+    await this.userRepository.save(user);
+
+    return { result: 'OK' };
   }
 
-  async setWeapon(userId: number, weapon: Weapon, slot: number) {
-    const user = await this.userRepository.findOne(userId);
+  async setWeapon(user: User, weapon: Weapon, slot: number) {
     const weaponToUpdate = user.weapons.find((w) => w.slot === slot);
 
     if (!weaponToUpdate) user.weapons.push({ weapon, slot } as any);
     else weaponToUpdate.weapon = weapon;
 
-    return this.userRepository.save(user);
+    await this.userRepository.save(user);
+
+    return { result: 'OK' };
   }
 
-  async removeWeapon(userId: number, slot: number) {
-    const user = await this.userRepository.findOne(userId);
+  async removeWeapon(user: User, slot: number) {
     user.weapons = user.weapons.filter((w) => w.slot !== slot);
+    await this.userRepository.save(user);
 
-    return this.userRepository.save(user);
+    return { result: 'OK' };
   }
 
   async addClip(user: User, clip: Clip) {
-    this.clipToUserRepository
-      .createQueryBuilder()
-      .insert()
-      .into(ClipToUser)
-      .values({ amount: 0, user, clip })
-      .orIgnore()
-      .execute();
+    await this.clipToUserRepository
+      .save({ amount: 0, user, clip })
+      .catch(() => null);
 
-    this.clipToUserRepository
-      .createQueryBuilder()
-      .update(ClipToUser)
-      .set({
-        amount: () => 'amount + 1',
-      })
-      .where({ user, clip })
-      .execute();
+    await this.clipToUserRepository.update(
+      { user, clip },
+      { amount: () => 'amount + 1' },
+    );
 
     return { result: 'OK' };
   }
 
   async removeClip(user: User, clip: Clip) {
-    this.clipToUserRepository
-      .createQueryBuilder()
-      .update(ClipToUser)
-      .set({
-        amount: () => 'amount - 1',
-      })
-      .where({ user, clip })
-      .execute();
-
-    this.clipToUserRepository
-      .createQueryBuilder()
-      .delete()
-      .from(ClipToUser)
-      .where('amount <= 0')
-      .execute();
+    await this.clipToUserRepository.update(
+      { user, clip },
+      { amount: () => 'amount - 1' },
+    );
+    await this.clipToUserRepository.delete({ amount: LessThanOrEqual(0) });
 
     return { result: 'OK' };
   }

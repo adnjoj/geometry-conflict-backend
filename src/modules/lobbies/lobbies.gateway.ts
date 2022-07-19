@@ -18,6 +18,7 @@ import { GamemodesResolver } from '../games/core/resolvers/gamemodes.resolver';
 import { AvailableLobbiesWsResponse } from './types/ws-responses/available-lobbies.ws-response';
 import { FailedToJoinLobbyWsResponse } from './types/ws-responses/failed-to-join-lobby.ws-response';
 import { SuccessfullyJoinedLobbyWsResponse } from './types/ws-responses/successfully-joined-lobby.ws-response';
+import { SkinTypesService } from '../skin-types/skin-types.service';
 
 @WebSocketGateway(3001, { cors: true, namespace: 'lobbies' })
 @UseGuards(WebsocketsJwtAuthGuard)
@@ -28,6 +29,7 @@ export class LobbiesGateway {
   constructor(
     private readonly lobbiesService: LobbiesService,
     private readonly mapsService: MapsService,
+    private readonly skinTypesService: SkinTypesService,
   ) {}
 
   @SubscribeMessage('get_lobbies')
@@ -62,9 +64,20 @@ export class LobbiesGateway {
     { lobbyId }: { lobbyId: number },
   ): Promise<FailedToJoinLobbyWsResponse | SuccessfullyJoinedLobbyWsResponse> {
     const user = client.data.user as User;
-    const failedResponse = new FailedToJoinLobbyWsResponse({ lobbyId });
 
-    if (!user.map) return failedResponse;
+    if (!user.map) {
+      return new FailedToJoinLobbyWsResponse({
+        lobbyId,
+        reason: 'Выберите карту',
+      });
+    }
+
+    if (!(await this.userHasAllSkinsSet(user))) {
+      return new FailedToJoinLobbyWsResponse({
+        lobbyId,
+        reason: 'Выберите образ персонажа',
+      });
+    }
 
     user.map = await this.mapsService.findOne({ id: user.map.id });
 
@@ -73,7 +86,12 @@ export class LobbiesGateway {
         ? this.lobbiesService.create(user.map)
         : this.lobbiesService.getOne(lobbyId);
 
-    if (!lobby) return failedResponse;
+    if (!lobby) {
+      return new FailedToJoinLobbyWsResponse({
+        lobbyId,
+        reason: 'Игра уже началась',
+      });
+    }
 
     const joinedLobby = this.lobbiesService.addPlayerToLobby(lobby.id, user);
 
@@ -87,6 +105,22 @@ export class LobbiesGateway {
       return new SuccessfullyJoinedLobbyWsResponse({ token });
     }
 
-    return failedResponse;
+    return new FailedToJoinLobbyWsResponse({
+      lobbyId,
+      reason: 'Игра уже началась',
+    });
+  }
+
+  private async userHasAllSkinsSet(user: User): Promise<boolean> {
+    const skinTypes = await this.skinTypesService.findAll();
+    let userHasAllSkins = true;
+
+    skinTypes.forEach(({ id }) => {
+      if (!user.skins.find(({ skin }) => skin.type.id === id)) {
+        userHasAllSkins = false;
+      }
+    });
+
+    return userHasAllSkins;
   }
 }
