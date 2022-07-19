@@ -21,6 +21,20 @@ export const stringValidationOptions = {
     })}`,
 };
 
+export const arrayValidationOptions = {
+  message: (v: ValidationArguments) =>
+    `exceptions.IsArray#${JSON.stringify({
+      field: v.property,
+    })}`,
+};
+
+export const objectValidationOptions = {
+  message: (v: ValidationArguments) =>
+    `exceptions.IsObject#${JSON.stringify({
+      field: v.property,
+    })}`,
+};
+
 export const minValidationOptions = {
   message: (v: ValidationArguments) =>
     `exceptions.Min#${JSON.stringify({

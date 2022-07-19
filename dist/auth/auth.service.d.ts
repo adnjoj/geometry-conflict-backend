@@ -1,9 +1,9 @@
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { RegistrationDto } from './dto/registration.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { RegistrationResponseDto } from './dto/registration-response.dto';
+import { UsersService } from '../users/users.service';
 export declare class AuthService {
     private usersService;
     private jwtService;

@@ -16,12 +16,10 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const permissions_service_1 = require("../permissions/permissions.service");
 const user_entity_1 = require("./entities/user.entity");
 let UsersService = class UsersService {
-    constructor(userRepository, permissionsService) {
+    constructor(userRepository) {
         this.userRepository = userRepository;
-        this.permissionsService = permissionsService;
     }
     findAll() {
         return this.userRepository.find();
@@ -41,23 +39,11 @@ let UsersService = class UsersService {
     delete(id) {
         return this.userRepository.delete(id);
     }
-    async addPermission(user, permissionName) {
-        user.permissions.push(await this.permissionsService.findOneByName(permissionName));
-        return this.userRepository.save(user);
-    }
-    async removePermission(user, permissionName) {
-        user.permissions = user.permissions.filter((p) => p.name !== permissionName);
-        return this.userRepository.save(user);
-    }
-    hasPermission(user, permissionName) {
-        return (user.permissions.find((p) => p.name === permissionName) !== undefined);
-    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository,
-        permissions_service_1.PermissionsService])
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], UsersService);
 exports.UsersService = UsersService;
 //# sourceMappingURL=users.service.js.map

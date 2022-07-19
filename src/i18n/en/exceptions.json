@@ -3,11 +3,19 @@
   "Unauthorized": "Unauthorized",
   "UserExists": "That username is already taken",
   "Forbidden": "Forbidden",
+
   "IsInt": "{field} must be an integer number",
   "IsString": "{field} must be a string",
   "IsNumber": "{field} must be a number",
+  "IsArray": "{field} must be an array",
   "Min": "{field} must not be less than {value}",
   "Max": "{field} must not be greater than {value}",
-  "MinLength": "{field} must be shorter than or equal to {value} characters",
-  "MaxLength": "{field} must be longer than or equal to {value} characters"
+  "MinLength": "{field} must be longer than or equal to {value} characters",
+  "MaxLength": "{field} must be shorter than or equal to {value} characters",
+
+  "ClipDoesNotExist": "Clip with such id does not exist",
+  "ClipAlreadyExists": "Clip with such name already exists",
+
+  "EntityColumnNotFound": "One or more of the presented properties do not exist on this entity",
+  "NoReferencedRow": "One of referenced rows does not exist"
 }

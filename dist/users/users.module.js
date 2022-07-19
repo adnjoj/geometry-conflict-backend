@@ -11,8 +11,8 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const roles_module_1 = require("../roles/roles.module");
 const user_entity_1 = require("./entities/user.entity");
-const users_controller_1 = require("./controllers/users.controller");
-const users_service_1 = require("./services/users.service");
+const users_controller_1 = require("./users.controller");
+const users_service_1 = require("./users.service");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
