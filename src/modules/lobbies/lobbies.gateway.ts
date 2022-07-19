@@ -12,13 +12,14 @@ import { WebsocketsJwtAuthGuard } from '../auth/guards/websockets-jwt-auth.guard
 
 import { LobbiesService } from './lobbies.service';
 import { MapsService } from '../maps/maps.service';
+import { SkinTypesService } from '../skin-types/skin-types.service';
+import { UsersService } from '../users/users.service';
 
 import { GamemodesResolver } from '../games/core/resolvers/gamemodes.resolver';
 
 import { AvailableLobbiesWsResponse } from './types/ws-responses/available-lobbies.ws-response';
 import { FailedToJoinLobbyWsResponse } from './types/ws-responses/failed-to-join-lobby.ws-response';
 import { SuccessfullyJoinedLobbyWsResponse } from './types/ws-responses/successfully-joined-lobby.ws-response';
-import { SkinTypesService } from '../skin-types/skin-types.service';
 
 @WebSocketGateway(3001, { cors: true, namespace: 'lobbies' })
 @UseGuards(WebsocketsJwtAuthGuard)
@@ -29,6 +30,7 @@ export class LobbiesGateway {
   constructor(
     private readonly lobbiesService: LobbiesService,
     private readonly mapsService: MapsService,
+    private readonly usersService: UsersService,
     private readonly skinTypesService: SkinTypesService,
   ) {}
 
@@ -37,10 +39,12 @@ export class LobbiesGateway {
     client: Socket,
   ): Promise<AvailableLobbiesWsResponse> {
     const user = client.data.user as User;
+    const mapId = (await user.map)?.id;
+    const map = await this.mapsService.findOne({ id: mapId });
 
-    if (!user.map) return;
+    if (!map) return;
 
-    const lobbies = this.lobbiesService.getAllForMap(user.map.id);
+    const lobbies = this.lobbiesService.getAllForMap(map.id);
 
     const data = lobbies.map((lobby) => ({ lobby, time: Date.now() }));
     const gamemodeResolver = new GamemodesResolver();
@@ -48,9 +52,9 @@ export class LobbiesGateway {
     data.push({
       lobby: {
         id: -1,
-        mapId: user.map.id,
+        mapId: map.id,
         playersCount: 0,
-        maxPlayersCount: gamemodeResolver.resolve(user.map)?.maxPlayersCount,
+        maxPlayersCount: gamemodeResolver.resolve(map)?.maxPlayersCount,
       },
       time: Date.now(),
     });
@@ -64,8 +68,10 @@ export class LobbiesGateway {
     { lobbyId }: { lobbyId: number },
   ): Promise<FailedToJoinLobbyWsResponse | SuccessfullyJoinedLobbyWsResponse> {
     const user = client.data.user as User;
+    const mapId = (await user.map)?.id;
+    const map = await this.mapsService.findOne({ id: mapId });
 
-    if (!user.map) {
+    if (!map) {
       return new FailedToJoinLobbyWsResponse({
         lobbyId,
         reason: 'Выберите карту',
@@ -79,11 +85,9 @@ export class LobbiesGateway {
       });
     }
 
-    user.map = await this.mapsService.findOne({ id: user.map.id });
-
     const lobby =
       lobbyId === -1
-        ? this.lobbiesService.create(user.map)
+        ? this.lobbiesService.create(map)
         : this.lobbiesService.getOne(lobbyId);
 
     if (!lobby) {
@@ -93,7 +97,19 @@ export class LobbiesGateway {
       });
     }
 
-    const joinedLobby = this.lobbiesService.addPlayerToLobby(lobby.id, user);
+    const userData = (await this.usersService.findOne(
+      { id: user.id },
+      true,
+    )) as any;
+    const joinedLobby = await this.lobbiesService.addPlayerToLobby(lobby.id, {
+      id: userData.id,
+      username: userData.__username__,
+      fraction: userData.__fraction__,
+      speciality: userData.__speciality__,
+      skins: userData.__skins__,
+      weapons: userData.__weapons__,
+      clips: userData.__clips__,
+    });
 
     this.server.emit(lobbyId === -1 ? 'lobby_created' : 'lobby_updated', {
       lobby: this.lobbiesService.getOne(lobby.id),
@@ -115,8 +131,10 @@ export class LobbiesGateway {
     const skinTypes = await this.skinTypesService.findAll();
     let userHasAllSkins = true;
 
+    const skins = await this.usersService.loadSkins(user);
+
     skinTypes.forEach(({ id }) => {
-      if (!user.skins.find(({ skin }) => skin.type.id === id)) {
+      if (!skins.find(({ skin }) => skin.type.id === id)) {
         userHasAllSkins = false;
       }
     });

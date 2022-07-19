@@ -6,7 +6,7 @@ import { GamesStore } from './stores/games.store';
 
 import { Game } from './core/game/game';
 
-import { User } from '../users/entities/user.entity';
+import { PlayerInitialData } from './types/player-initial-data.type';
 
 import { GamemodesResolver } from './core/resolvers/gamemodes.resolver';
 import { GameObjectsResolver } from './core/resolvers/game-objects.resolver';
@@ -34,7 +34,10 @@ export class GamesService {
     return game;
   }
 
-  public addPlayer(gameId: number, user: User): boolean {
+  public async addPlayer(
+    gameId: number,
+    user: PlayerInitialData,
+  ): Promise<boolean> {
     return this.gamesStore.get(gameId)?.playersStore.add(user);
   }
 

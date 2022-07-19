@@ -4,11 +4,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Game } from '../games/core/game/game';
 import { Lobby } from './types/lobby.type';
 import { Map as MapEntity } from '../maps/entities/map.entity';
+import { PlayerInitialData } from '../games/types/player-initial-data.type';
 
 import { LobbiesStore } from './stores/lobbies.store';
 
 import { GamesService } from '../games/games.service';
-import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class LobbiesService {
@@ -51,7 +51,10 @@ export class LobbiesService {
     return Array.from(this.lobbiesStore.getAllForMap(mapId) ?? []);
   }
 
-  addPlayerToLobby(lobbyId: number, user: User): boolean {
+  async addPlayerToLobby(
+    lobbyId: number,
+    user: PlayerInitialData,
+  ): Promise<boolean> {
     const playerAdded = this.gamesService.addPlayer(lobbyId, user);
 
     if (playerAdded) {

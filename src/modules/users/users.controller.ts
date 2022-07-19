@@ -41,17 +41,24 @@ export class UsersController {
   @Get()
   @CheckPolicies(readUserPolicyHandler)
   findAll() {
-    return this.usersService.findAll();
+    const loadAllRelations = true;
+    return this.usersService.findAll(loadAllRelations);
   }
 
   @Get('me')
   findLoggedUser(@Req() { user }: Request) {
-    return user;
+    const loadAllRelations = true;
+
+    return this.usersService.findOne(
+      { id: (user as User).id },
+      loadAllRelations,
+    );
   }
 
   @Get(':id')
   findOne(@Param() { id }: UserIdDto) {
-    return this.usersService.findOne({ id });
+    const loadAllRelations = true;
+    return this.usersService.findOne({ id }, loadAllRelations);
   }
 
   @Post('me/fraction')

@@ -1,5 +1,5 @@
 import type { GameObjectsStore } from './game-objects-store';
-import type { User } from 'src/modules/users/entities/user.entity';
+import type { PlayerInitialData } from '../../types/player-initial-data.type';
 
 import { Fractions } from '../constants/fractions.enum';
 
@@ -23,7 +23,7 @@ export class PlayersStore {
     return this._players.size;
   }
 
-  public add(user: User): boolean {
+  public add(user: PlayerInitialData): boolean {
     if (this._players.size >= this._maxPlayersCount) return false;
     if (this._players.has(user.id)) return false;
 

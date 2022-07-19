@@ -6,6 +6,7 @@ import { SkinsModule } from '../skins/skins.module';
 
 import { User } from './entities/user.entity';
 import { ClipToUser } from './entities/clip-to-user.entity';
+import { SkinToUser } from './entities/skin-to-user.entity';
 
 import { UserExistsRule } from './validation-rules/user-exists.validation-rule';
 import { UsersController } from './users.controller';
@@ -13,7 +14,7 @@ import { UsersService } from './users.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, ClipToUser]),
+    TypeOrmModule.forFeature([User, ClipToUser, SkinToUser]),
     RolesModule,
     SkinsModule,
   ],

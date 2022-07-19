@@ -47,36 +47,36 @@ export class User {
   @JoinTable()
   roles: Role[];
 
-  @ManyToOne(() => Fraction, { eager: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => Fraction, { lazy: true, onDelete: 'SET NULL' })
   @JoinTable()
-  fraction: Fraction;
+  fraction: Promise<Fraction>;
 
-  @ManyToOne(() => Speciality, { eager: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => Speciality, { lazy: true, onDelete: 'SET NULL' })
   @JoinTable()
-  speciality: Speciality;
+  speciality: Promise<Speciality>;
 
   @OneToMany(() => SkinToUser, (skinToUser) => skinToUser.user, {
-    eager: true,
+    lazy: true,
     cascade: true,
   })
   @JoinTable()
-  skins: SkinToUser[];
+  skins: Promise<SkinToUser[]>;
 
   @OneToMany(() => WeaponToUser, (weaponToUser) => weaponToUser.user, {
-    eager: true,
+    lazy: true,
     cascade: true,
   })
   @JoinTable()
-  weapons: WeaponToUser[];
+  weapons: Promise<WeaponToUser[]>;
 
   @OneToMany(() => ClipToUser, (clipToUser) => clipToUser.user, {
-    eager: true,
+    lazy: true,
     cascade: true,
   })
   @JoinTable()
-  clips: ClipToUser[];
+  clips: Promise<ClipToUser[]>;
 
-  @ManyToOne(() => Map, { onDelete: 'SET NULL', eager: true })
+  @ManyToOne(() => Map, { onDelete: 'SET NULL', lazy: true })
   @JoinTable()
-  map: Map;
+  map: Promise<Map>;
 }

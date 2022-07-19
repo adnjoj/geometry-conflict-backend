@@ -5,12 +5,11 @@ import { Vector } from '../vector';
 import { playerSize } from '../constants/player.constants';
 import { CollisionCategories } from '../constants/collision-categories.enum';
 
-import type { User } from 'src/modules/users/entities/user.entity';
-
 import { GameObject } from '../game-objects/game-object';
 import { Interactable } from '../../types/interactable.type';
 import { Interactor } from '../interactor';
 
+import { PlayerInitialData } from '../../types/player-initial-data.type';
 import { PlayerIdWsResponse } from '../../types/ws-responses/player-id.ws-response';
 
 import { WeaponsResolver } from '../resolvers/weapons.resolver';
@@ -51,8 +50,7 @@ export class Player extends GameObject implements Interactable {
   public readonly W = playerSize.w; // width
   public readonly H = playerSize.h; // height
 
-  public readonly fractionName: string;
-
+  private _fractionName: string;
   private _weaponsSwitcher: WeaponsSwitcher;
   private _weaponReloadingController: WeaponReloadingController;
   private _shootingController: ShootingController;
@@ -64,18 +62,22 @@ export class Player extends GameObject implements Interactable {
   // Necessary so that the textures of the playerd do not overlap each other
   private readonly _partsOffsetZ = Math.random();
 
-  constructor(private readonly _user: User) {
+  constructor(private readonly _user: PlayerInitialData) {
     super();
     this.name = _user.username;
-    this.fractionName = _user.fraction.name;
+    this._fractionName = _user.fraction.name;
   }
 
-  public get userData(): User {
+  public get userData(): PlayerInitialData {
     return new Proxy(this._user, {
       set: () => false,
       defineProperty: () => false,
       deleteProperty: () => false,
     });
+  }
+
+  public get fractionName(): string {
+    return this._fractionName;
   }
 
   public onCreate(): void {

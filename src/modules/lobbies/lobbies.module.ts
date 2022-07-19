@@ -5,6 +5,7 @@ import { AuthModule } from '../auth/auth.module';
 import { GamesModule } from '../games/games.module';
 import { MapsModule } from '../maps/maps.module';
 import { SkinTypesModule } from '../skin-types/skin-types.module';
+import { UsersModule } from '../users/users.module';
 
 import { LobbiesService } from './lobbies.service';
 
@@ -18,6 +19,7 @@ import { LobbiesGateway } from './lobbies.gateway';
     GamesModule,
     MapsModule,
     SkinTypesModule,
+    UsersModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: 60 },
