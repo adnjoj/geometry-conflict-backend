@@ -17,7 +17,7 @@ import { TokenVerificationSucceededWsResponse } from './types/ws-responses/token
 
 import { GamesService } from './games.service';
 
-@WebSocketGateway(3001, { cors: true, namespace: 'game' })
+@WebSocketGateway({ cors: true, namespace: 'game' })
 export class GamesGateway {
   constructor(
     private readonly gamesService: GamesService,

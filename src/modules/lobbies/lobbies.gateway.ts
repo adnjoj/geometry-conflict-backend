@@ -21,7 +21,7 @@ import { AvailableLobbiesWsResponse } from './types/ws-responses/available-lobbi
 import { FailedToJoinLobbyWsResponse } from './types/ws-responses/failed-to-join-lobby.ws-response';
 import { SuccessfullyJoinedLobbyWsResponse } from './types/ws-responses/successfully-joined-lobby.ws-response';
 
-@WebSocketGateway(3001, { cors: true, namespace: 'lobbies' })
+@WebSocketGateway({ cors: true, namespace: 'lobbies' })
 @UseGuards(WebsocketsJwtAuthGuard)
 export class LobbiesGateway {
   @WebSocketServer()
