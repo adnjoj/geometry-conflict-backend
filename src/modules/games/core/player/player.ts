@@ -370,12 +370,11 @@ export class Player extends GameObject implements Interactable {
   }
 
   private updatePartsZ(): void {
-    const body = this._parts.get('skin') as ImageObject;
+    const h = this.H;
     const { y } = this.transform;
-    const { h } = body.size;
 
     this._parts.forEach((part) => {
-      part.z = y + h / 4 + this._partsOffsetZ;
+      part.z = y + h / 2 + this._partsOffsetZ;
       if (part instanceof ImageObject) part.z -= part.size.h / 4;
     });
 

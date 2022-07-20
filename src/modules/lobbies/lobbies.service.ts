@@ -36,7 +36,7 @@ export class LobbiesService {
     const game = this.gamesService.create(map);
     const lobby = this.gameToLobby(game);
 
-    setTimeout(() => this.start(game.id), 5 * 1000);
+    setTimeout(() => this.start(game.id), 20 * 1000);
 
     this.lobbiesStore.add(lobby);
 

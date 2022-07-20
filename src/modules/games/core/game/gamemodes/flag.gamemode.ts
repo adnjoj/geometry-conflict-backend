@@ -41,7 +41,7 @@ export class FlagGamemode extends Game {
         flag.captureFraction = undefined;
       }
 
-      if (Date.now() - flag.captureTime >= 3 * 1000) {
+      if (Date.now() - flag.captureTime >= 30 * 1000) {
         this._winnerFraction = fractionThatCapturedTheFlag;
       }
     });
