@@ -55,7 +55,7 @@ export class LobbiesService {
     lobbyId: number,
     user: PlayerInitialData,
   ): Promise<boolean> {
-    const playerAdded = this.gamesService.addPlayer(lobbyId, user);
+    const playerAdded = await this.gamesService.addPlayer(lobbyId, user);
 
     if (playerAdded) {
       const lobby = this.lobbiesStore.getOne(lobbyId);
