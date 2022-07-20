@@ -103,7 +103,7 @@ export class LobbiesGateway {
     )) as any;
     const joinedLobby = await this.lobbiesService.addPlayerToLobby(lobby.id, {
       id: userData.id,
-      username: userData.__username__,
+      username: userData.username,
       fraction: userData.__fraction__,
       speciality: userData.__speciality__,
       skins: userData.__skins__,

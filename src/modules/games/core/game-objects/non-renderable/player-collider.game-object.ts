@@ -21,6 +21,8 @@ export class PlayerCollider extends GameObject {
   }
 
   public onCreate(): void {
+    if (this._points.length < 3) return;
+
     this._collider = Bodies.fromVertices(
       this._points.reduce((a, b) => a + b.x, 0) / this._points.length,
       this._points.reduce((a, b) => a + b.y, 0) / this._points.length,

@@ -59,7 +59,7 @@ export class Player extends GameObject implements Interactable {
   private readonly _parts = new Map<string, ImageObject | TextObject>();
   private readonly _motionController = new MotionController(this);
 
-  // Necessary so that the textures of the playerd do not overlap each other
+  // Necessary so that the textures of the player do not overlap each other
   private readonly _partsOffsetZ = Math.random();
 
   constructor(private readonly _user: PlayerInitialData) {
