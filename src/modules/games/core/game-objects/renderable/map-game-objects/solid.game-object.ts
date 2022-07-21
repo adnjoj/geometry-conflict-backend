@@ -14,6 +14,6 @@ export class SolidObject extends ImageObject {
     this._image = initialData.image;
     this.transform.setPosition(initialData.x, initialData.y);
 
-    this.setTexture(`game-objects/${this._image.id}/gameObjectImage.png`);
+    this.setTexture(`game-object-${this._image.id}`);
   }
 }

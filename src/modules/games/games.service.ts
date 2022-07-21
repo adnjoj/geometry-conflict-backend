@@ -28,6 +28,9 @@ export class GamesService {
     );
 
     const game = mapsTransformer.toClass(map);
+    game.eventsManager.addListener('finish', () => {
+      this.gamesStore.delete(game.id);
+    });
 
     this.gamesStore.add(game);
 

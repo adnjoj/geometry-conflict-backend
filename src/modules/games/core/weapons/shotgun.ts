@@ -24,7 +24,7 @@ export class Shotgun extends Weapon {
   }
 
   public shootTo(x: number, y: number): void {
-    const bulletTexture = `weapons/${this.weaponId}/bulletImage.png`;
+    const bulletTexture = `weapon-${this.weaponId}-bullet`;
 
     for (let i = 0; i < 10; i += 1) {
       const bullet = new Bullet(bulletTexture);

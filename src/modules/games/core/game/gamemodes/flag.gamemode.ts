@@ -88,7 +88,7 @@ export class FlagGamemode extends Game {
     Object.entries(flagsData).forEach(([fraction, { position, color }]) => {
       const flag = new FlagObject();
       flag.transform.setPosition(position.x, position.y);
-      flag.setTexture(`flags/${color}/flagImage.png`);
+      flag.setTexture(`flag-${color}`);
 
       this._flags.set(fraction, flag);
       this.gameObjectsStore.add(flag);

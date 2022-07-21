@@ -11,7 +11,7 @@ export class DroppedClipObject extends ImageObject implements Interactable {
   constructor(public readonly clip: Clip) {
     super();
     this.name = clip.clipName;
-    this.setTexture(`clips/${clip.clipId}/clipImage.png`);
+    this.setTexture(`clip-${clip.clipId}`);
   }
 
   public interactor: Interactor;

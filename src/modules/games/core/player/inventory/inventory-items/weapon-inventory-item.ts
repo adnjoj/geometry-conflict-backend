@@ -5,7 +5,7 @@ import { InventoryItem } from './inventory-item';
 
 export class WeaponInventoryItem extends InventoryItem<Weapon> {
   public get texture(): string {
-    return `weapons/${this.get()?.weaponId}/weaponImage.png`;
+    return `weapon-${this.get()?.weaponId}`;
   }
 
   public get label(): string {

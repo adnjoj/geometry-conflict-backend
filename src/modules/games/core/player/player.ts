@@ -283,7 +283,9 @@ export class Player extends GameObject implements Interactable {
     this._parts.forEach((part) => {
       this._game.gameObjectsStore.add(part);
       this.transform.addChild(part);
-      if (part instanceof ImageObject) part.parseSize();
+      if (part instanceof PlayerAppearanceObject) {
+        part.parseSize(`skins/${part.skinId}/skinImage.png`);
+      }
     });
   }
 
@@ -354,10 +356,12 @@ export class Player extends GameObject implements Interactable {
     );
     const angle = weaponDirectionVector.angle;
     const weaponObject = this._parts.get('weapon_object') as PlayerWeaponObject;
+    const selectedWeapon = this._weaponsSwitcher.selectedWeapon;
+    const selectedWeaponId = selectedWeapon?.weaponId;
 
     weaponObject?.transform.setPosition(positionX, positionY);
-    weaponObject?.setWeapon(this._weaponsSwitcher.selectedWeapon);
-    weaponObject?.parseSize();
+    weaponObject?.setWeapon(selectedWeapon);
+    weaponObject?.parseSize(`weapons/${selectedWeaponId}/weaponImage.png`);
     weaponObject.transform.setAngle(angle);
 
     this._weaponsSwitcher.selectedWeapon?.imageUpdater?.updateImage(

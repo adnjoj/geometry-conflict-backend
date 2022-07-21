@@ -24,10 +24,10 @@ export class ImageObject extends RenderableGameObject {
     this._textureSrc = texture;
   }
 
-  public async parseSize(): Promise<void> {
+  public async parseSize(file: string): Promise<void> {
     if (this.texture !== 'empty') {
       try {
-        const dimensions = await sizeOf(join(pathToStatic, '/', this.texture));
+        const dimensions = await sizeOf(join(pathToStatic, '/', file));
         this._size = { w: dimensions.width, h: dimensions.height };
       } catch (e) {
         console.log(e);

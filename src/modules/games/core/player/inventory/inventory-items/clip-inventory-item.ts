@@ -5,7 +5,7 @@ import { InventoryItem } from './inventory-item';
 
 export class ClipInventoryItem extends InventoryItem<Clip> {
   public get texture(): string {
-    return `clips/${this.get()?.clipId}/clipImage.png`;
+    return `clip-${this.get()?.clipId}`;
   }
 
   public get label(): string {

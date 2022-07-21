@@ -10,7 +10,7 @@ export class PlayerWeaponObject extends ImageObject {
 
   public setWeapon(weapon: Weapon): void {
     if (!weapon) return this.setTexture('empty');
-    this.setTexture(`weapons/${weapon.weaponId}/weaponImage.png`);
+    this.setTexture(`weapon-${weapon.weaponId}`);
   }
 
   public update(): void {

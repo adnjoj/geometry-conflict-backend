@@ -12,7 +12,7 @@ export class DroppedWeaponObject extends ImageObject implements Interactable {
     super();
     weapon.setOwner(null);
     this.name = weapon.weaponName;
-    this.setTexture(`weapons/${weapon.weaponId}/weaponImage.png`);
+    this.setTexture(`weapon-${weapon.weaponId}`);
   }
 
   public interactor: Interactor;
