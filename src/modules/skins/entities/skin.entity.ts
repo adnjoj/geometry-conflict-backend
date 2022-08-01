@@ -35,22 +35,22 @@ export class Skin {
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
-  id: number;
+  id!: number;
 
   @Column({ unique: true, length: 50 })
   @IsString(stringValidationOptions)
   @MaxLength(50, maxLengthValidationOptions)
-  name: string;
+  name!: string;
 
   @ManyToOne(() => SkinType, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()
   @Type(() => PickType(SkinType, ['id'] as const))
   @IsObject(objectValidationOptions)
-  type: SkinType;
+  type?: SkinType;
 
   @ManyToMany(() => Fraction, { eager: true })
   @JoinTable()
   @Type(() => PickType(Fraction, ['id'] as const))
   @IsArray(arrayValidationOptions)
-  availableFractions: Fraction[];
+  availableFractions!: Fraction[];
 }

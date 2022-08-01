@@ -10,5 +10,5 @@ import {
 export class UpdateSkinDto extends PartialType(CreateSkinDto) {
   @IsString(stringValidationOptions)
   @MaxLength(50, maxLengthValidationOptions)
-  name: string;
+  name!: string;
 }

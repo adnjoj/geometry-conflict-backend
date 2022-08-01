@@ -7,5 +7,5 @@ export class UserIdDto {
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Validate(UserExistsRule)
-  id: number;
+  id!: number;
 }

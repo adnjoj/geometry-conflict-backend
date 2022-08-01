@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 import { User } from './user.entity';
 import { Skin } from 'src/modules/skins/entities/skin.entity';
@@ -6,13 +6,11 @@ import { Skin } from 'src/modules/skins/entities/skin.entity';
 @Entity()
 export class SkinToUser {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id!: number;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE', orphanedRowAction: 'delete' })
-  @JoinTable()
-  user: User;
+  user?: User;
 
   @ManyToOne(() => Skin, { eager: true, onDelete: 'CASCADE' })
-  @JoinTable()
-  skin: Skin;
+  skin?: Skin;
 }

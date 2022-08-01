@@ -9,5 +9,5 @@ import { Skin } from 'src/modules/skins/entities/skin.entity';
 export class SetSkinDto {
   @Type(() => PickType(Skin, ['id'] as const))
   @IsObject(objectValidationOptions)
-  skin: Skin;
+  skin!: Pick<Skin, 'id'>;
 }

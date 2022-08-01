@@ -27,56 +27,47 @@ import { Map } from 'src/modules/maps/entities/map.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ length: 50, unique: true })
   @IsString(stringValidationOptions)
-  @MinLength(1, maxLengthValidationOptions)
+  @MinLength(1, minLengthValidationOptions)
   @MaxLength(50, maxLengthValidationOptions)
-  username: string;
+  username!: string;
 
   @Exclude({ toPlainOnly: true })
   @Column()
   @IsString(stringValidationOptions)
   @MinLength(6, minLengthValidationOptions)
   @MaxLength(50, maxLengthValidationOptions)
-  password: string;
+  password!: string;
 
   @Exclude()
   @ManyToMany(() => Role, { eager: true })
   @JoinTable()
-  roles: Role[];
+  roles!: Role[];
 
-  @ManyToOne(() => Fraction, { lazy: true, onDelete: 'SET NULL' })
-  @JoinTable()
-  fraction: Promise<Fraction>;
+  @ManyToOne(() => Fraction, { onDelete: 'SET NULL' })
+  fraction!: Promise<Fraction | undefined>;
 
-  @ManyToOne(() => Speciality, { lazy: true, onDelete: 'SET NULL' })
-  @JoinTable()
-  speciality: Promise<Speciality>;
+  @ManyToOne(() => Speciality, { onDelete: 'SET NULL' })
+  speciality!: Promise<Speciality | undefined>;
 
   @OneToMany(() => SkinToUser, (skinToUser) => skinToUser.user, {
-    lazy: true,
     cascade: true,
   })
-  @JoinTable()
-  skins: Promise<SkinToUser[]>;
+  skins!: Promise<SkinToUser[]>;
 
   @OneToMany(() => WeaponToUser, (weaponToUser) => weaponToUser.user, {
-    lazy: true,
     cascade: true,
   })
-  @JoinTable()
-  weapons: Promise<WeaponToUser[]>;
+  weapons!: Promise<WeaponToUser[]>;
 
   @OneToMany(() => ClipToUser, (clipToUser) => clipToUser.user, {
-    lazy: true,
     cascade: true,
   })
-  @JoinTable()
-  clips: Promise<ClipToUser[]>;
+  clips!: Promise<ClipToUser[]>;
 
-  @ManyToOne(() => Map, { onDelete: 'SET NULL', lazy: true })
-  @JoinTable()
-  map: Promise<Map>;
+  @ManyToOne(() => Map, { onDelete: 'SET NULL' })
+  map!: Promise<Map | undefined>;
 }

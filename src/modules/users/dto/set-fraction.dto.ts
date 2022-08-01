@@ -9,5 +9,5 @@ import { Fraction } from 'src/modules/fractions/entities/fraction.entity';
 export class SetFractionDto {
   @Type(() => PickType(Fraction, ['id'] as const))
   @IsObject(objectValidationOptions)
-  fraction: Fraction;
+  fraction!: Pick<Fraction, 'id'>;
 }

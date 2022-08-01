@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinTable,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 import { User } from './user.entity';
 import { Weapon } from 'src/modules/weapons/entities/weapon.entity';
@@ -12,16 +6,14 @@ import { Weapon } from 'src/modules/weapons/entities/weapon.entity';
 @Entity()
 export class WeaponToUser {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id!: number;
 
   @Column()
-  slot: number;
+  slot!: number;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE', orphanedRowAction: 'delete' })
-  @JoinTable()
-  user: User;
+  user?: User;
 
   @ManyToOne(() => Weapon, { eager: true, onDelete: 'CASCADE' })
-  @JoinTable()
-  weapon: Weapon;
+  weapon?: Weapon;
 }

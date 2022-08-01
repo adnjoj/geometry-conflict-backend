@@ -38,64 +38,64 @@ export class Weapon {
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
-  id: number;
+  id!: number;
 
   @Column({ unique: true, length: 50 })
   @IsString(stringValidationOptions)
   @MaxLength(50, maxLengthValidationOptions)
-  name: string;
+  name!: string;
 
   @ManyToOne(() => WeaponType, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()
   @Type(() => PickType(WeaponType, ['id'] as const))
   @IsObject(objectValidationOptions)
-  type: WeaponType;
+  type?: WeaponType;
 
   @Column()
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
-  damage: number;
+  damage!: number;
 
   @Column()
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
-  rateOfFire: number;
+  rateOfFire!: number;
 
   @Column()
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
-  spread: number;
+  spread!: number;
 
   @Column()
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
-  firingRange: number;
+  firingRange!: number;
 
   @Column()
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
-  reloadSpeed: number;
+  reloadSpeed!: number;
 
   @Column('double')
   @Type(() => Number)
   @IsNumber({}, numberValidationOptions)
   @Min(0, minValidationOptions)
-  weight: number;
+  weight!: number;
 
   @ManyToOne(() => Clip, { eager: true, onDelete: 'CASCADE' })
   @JoinTable()
   @Type(() => PickType(Clip, ['id'] as const))
   @IsObject(objectValidationOptions)
-  clip: Clip;
+  clip?: Clip;
 
   @ManyToMany(() => Speciality, { eager: true })
   @JoinTable()
   @Type(() => PickType(Speciality, ['id'] as const))
   @IsArray(arrayValidationOptions)
-  availableSpecialities: Speciality[];
+  availableSpecialities!: Speciality[];
 }

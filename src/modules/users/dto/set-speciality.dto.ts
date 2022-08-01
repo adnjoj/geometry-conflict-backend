@@ -9,5 +9,5 @@ import { Speciality } from 'src/modules/specialities/entities/speciality.entity'
 export class SetSpecialityDto {
   @Type(() => PickType(Speciality, ['id'] as const))
   @IsObject(objectValidationOptions)
-  speciality: Speciality;
+  speciality!: Pick<Speciality, 'id'>;
 }

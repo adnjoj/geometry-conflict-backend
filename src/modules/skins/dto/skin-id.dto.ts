@@ -7,5 +7,5 @@ export class SkinIdDto {
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Validate(SkinExistsRule)
-  id: number;
+  id!: number;
 }

@@ -15,9 +15,9 @@ export class SetWeaponDto {
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
   @Max(2, maxValidationOptions)
-  slot: number;
+  slot!: number;
 
   @Type(() => PickType(Weapon, ['id'] as const))
   @IsObject(objectValidationOptions)
-  weapon: Weapon;
+  weapon!: Pick<Weapon, 'id'>;
 }

@@ -7,5 +7,5 @@ export class SpecialityIdDto {
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Validate(SpecialityExistsRule)
-  id: number;
+  id!: number;
 }

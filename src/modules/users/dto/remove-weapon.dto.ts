@@ -10,5 +10,5 @@ export class RemoveWeaponDto {
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
   @Max(2, maxValidationOptions)
-  slot: number;
+  slot!: number;
 }

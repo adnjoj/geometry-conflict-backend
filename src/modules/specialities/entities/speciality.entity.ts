@@ -15,10 +15,10 @@ export class Speciality {
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Min(0, minValidationOptions)
-  id: number;
+  id!: number;
 
   @Column({ unique: true, length: 50 })
   @IsString(stringValidationOptions)
   @MaxLength(50, maxLengthValidationOptions)
-  name: string;
+  name!: string;
 }

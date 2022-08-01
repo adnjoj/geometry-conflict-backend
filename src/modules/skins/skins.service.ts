@@ -35,8 +35,8 @@ export class SkinsService {
   }
 
   async update(id: number, skin: UpdateSkinDto) {
-    const oldSkin = await this.skinRepository.findOne(id);
-    return this.skinRepository.save(Object.assign(oldSkin, skin));
+    if (Object.keys(skin).length === 0) return {};
+    return this.skinRepository.update({ id }, skin);
   }
 
   async delete(id: number) {

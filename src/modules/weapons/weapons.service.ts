@@ -29,34 +29,44 @@ export class WeaponsService {
   async create(weapon: CreateWeaponDto) {
     const newWeapon = await this.weaponRepository.save(weapon);
 
-    mkdirSync(join(PATH_TO_STATIC, 'weapons', newWeapon.id.toString(10)));
+    try {
+      mkdirSync(this.getPathToWeaponFolder(newWeapon.id));
+    } catch (error) {
+      // TODO: Logging
+    }
 
     return newWeapon;
   }
 
-  async update(id: number, weapon: UpdateWeaponDto) {
-    const oldWeapon = await this.weaponRepository.findOne(id);
-    return this.weaponRepository.save(Object.assign(oldWeapon, weapon));
+  update(id: number, weapon: UpdateWeaponDto) {
+    if (Object.keys(weapon).length === 0) return {};
+    return this.weaponRepository.update({ id }, weapon);
   }
 
   async delete(id: number) {
     const deleteResult = await this.weaponRepository.delete(id);
 
-    rmSync(join(PATH_TO_STATIC, 'weapons', id.toString(10)), {
-      recursive: true,
-      force: true,
-    });
+    try {
+      rmSync(this.getPathToWeaponFolder(id), { recursive: true, force: true });
+    } catch (error) {
+      // TODO: Logging
+    }
 
     return deleteResult;
   }
 
   saveFiles(id: number, files: WeaponFilesDto) {
-    const targetDirectory = join(PATH_TO_STATIC, 'weapons', id.toString(10));
+    const targetDirectory = this.getPathToWeaponFolder(id);
 
-    Object.entries(files).forEach(([fileName, attachedFiles]) => {
-      if (!attachedFiles[0]) return;
+    Object.entries(files).forEach(
+      ([fileName, attachedFiles]: [string, Express.Multer.File[]]) => {
+        if (!attachedFiles?.[0]) return;
+        writeFileSync(join(targetDirectory, fileName), attachedFiles[0].buffer);
+      },
+    );
+  }
 
-      writeFileSync(join(targetDirectory, fileName), attachedFiles[0].buffer);
-    });
+  private getPathToWeaponFolder(id: number) {
+    return join(PATH_TO_STATIC, 'weapons', id.toString(10));
   }
 }

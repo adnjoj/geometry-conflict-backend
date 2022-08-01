@@ -9,5 +9,5 @@ import { Map } from 'src/modules/maps/entities/map.entity';
 export class SetMapDto {
   @Type(() => PickType(Map, ['id'] as const))
   @IsObject(objectValidationOptions)
-  map: Map;
+  map!: Pick<Map, 'id'>;
 }

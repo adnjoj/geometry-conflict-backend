@@ -9,5 +9,5 @@ import { Clip } from 'src/modules/clips/entities/clip.entity';
 export class AddClipDto {
   @Type(() => PickType(Clip, ['id'] as const))
   @IsObject(objectValidationOptions)
-  clip: Clip;
+  clip!: Pick<Clip, 'id'>;
 }

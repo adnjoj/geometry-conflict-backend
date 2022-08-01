@@ -11,8 +11,6 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import { User } from './entities/user.entity';
-
 import { UserIdDto } from './dto/user-id.dto';
 import { SetFractionDto } from './dto/set-fraction.dto';
 import { SetSpecialityDto } from './dto/set-speciality.dto';
@@ -47,12 +45,9 @@ export class UsersController {
 
   @Get('me')
   findLoggedUser(@Req() { user }: Request) {
+    const { id } = user!;
     const loadAllRelations = true;
-
-    return this.usersService.findOne(
-      { id: (user as User).id },
-      loadAllRelations,
-    );
+    return this.usersService.findOne({ id }, loadAllRelations);
   }
 
   @Get(':id')
@@ -63,44 +58,44 @@ export class UsersController {
 
   @Post('me/fraction')
   setFraction(@Req() { user }: Request, @Body() { fraction }: SetFractionDto) {
-    return this.usersService.setFraction(user as User, fraction);
+    return this.usersService.setFraction(user!, fraction.id);
   }
 
   @Post('me/speciality')
   setSpeciality(
-    @Req() { user }: Request,
+    @Req() { user }: Express.Request,
     @Body() { speciality }: SetSpecialityDto,
   ) {
-    return this.usersService.setSpeciality(user as User, speciality);
+    return this.usersService.setSpeciality(user!, speciality.id);
   }
 
   @Post('me/map')
   setMap(@Req() { user }: Request, @Body() { map }: SetMapDto) {
-    return this.usersService.setMap(user as User, map);
+    return this.usersService.setMap(user!, map.id);
   }
 
   @Post('me/skins')
   setSkin(@Req() { user }: Request, @Body() { skin }: SetSkinDto) {
-    return this.usersService.setSkin(user as User, skin);
+    return this.usersService.setSkin(user!, skin.id);
   }
 
   @Post('me/weapons')
   setWeapon(@Req() { user }: Request, @Body() { weapon, slot }: SetWeaponDto) {
-    return this.usersService.setWeapon(user as User, weapon, slot);
+    return this.usersService.setWeapon(user!, slot, weapon.id);
   }
 
   @Delete('me/weapons')
   removeWeapon(@Req() { user }: Request, @Body() { slot }: RemoveWeaponDto) {
-    return this.usersService.removeWeapon(user as User, slot);
+    return this.usersService.removeWeapon(user!, slot);
   }
 
   @Post('me/clips')
   addClip(@Req() { user }: Request, @Body() { clip }: AddClipDto) {
-    return this.usersService.addClip(user as User, clip);
+    return this.usersService.addClip(user!, clip.id);
   }
 
   @Delete('me/clips')
   removeClip(@Req() { user }: Request, @Body() { clip }: RemoveClipDto) {
-    return this.usersService.removeClip(user as User, clip);
+    return this.usersService.removeClip(user!, clip.id);
   }
 }

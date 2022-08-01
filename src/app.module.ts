@@ -34,6 +34,7 @@ import { GamemodesModule } from './modules/gamemodes/gamemodes.module';
 import { MapsModule } from './modules/maps/maps.module';
 import { GamesModule } from './modules/games/games.module';
 import { LobbiesModule } from './modules/lobbies/lobbies.module';
+import { LoggerModule } from './modules/logger/logger.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { LobbiesModule } from './modules/lobbies/lobbies.module';
     MapsModule,
     GamesModule,
     LobbiesModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [

@@ -7,5 +7,5 @@ export class WeaponTypeIdDto {
   @Type(() => Number)
   @IsInt(intValidationOptions)
   @Validate(WeaponTypeExistsRule)
-  id: number;
+  id!: number;
 }

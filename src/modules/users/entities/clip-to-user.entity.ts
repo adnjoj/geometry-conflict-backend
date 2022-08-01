@@ -3,7 +3,6 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  JoinTable,
   Unique,
 } from 'typeorm';
 
@@ -14,16 +13,14 @@ import { Clip } from 'src/modules/clips/entities/clip.entity';
 @Unique('unique_user_clip', ['user', 'clip'])
 export class ClipToUser {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id!: number;
 
   @Column()
-  amount: number;
+  amount!: number;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE', orphanedRowAction: 'delete' })
-  @JoinTable()
-  user: User;
+  user?: User;
 
   @ManyToOne(() => Clip, { eager: true, onDelete: 'CASCADE' })
-  @JoinTable()
-  clip: Clip;
+  clip?: Clip;
 }

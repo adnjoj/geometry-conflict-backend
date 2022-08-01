@@ -13,5 +13,5 @@ export class CreateSkinDto extends OmitType(Skin, ['id'] as const) {
   @IsString(stringValidationOptions)
   @MaxLength(50, maxLengthValidationOptions)
   @Validate(SkinDoesNotExistRule)
-  name: string;
+  name!: string;
 }
